@@ -1,0 +1,33 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+
+ 	{"type":"Feature","properties":{"x":"1017160.47452","city":"Brooklyn","businessname":"Pratt Institute","businesstype":"Institution","design":"Design Provider","y":"237209.638491","owner":"","address":"200 Willoughby Ave, Brooklyn, NY 11205","objectid":"0000","long":"-73.9671357","website":"www.pratt.edu","boro":"BN","remarks":null,"type":"Point","lat":"40.6908148"},"geometry":{"type":"Point","coordinates":[-73.9671357,40.6908148]}},
+
+    {"type":"Feature","properties":{"x":"1017160.47452","city":"Brooklyn","businessname":"BAO Food and Drink","businesstype":"Food and Manufacturing","design":"Graphics and Web","y":"237209.638491","owner":"Mike  Schwaltz","address":"23-23 Borden Ave, Long Island City, NY 11101","objectid":"0001","long":"-73.8811","website":"www.baofoodanddrink.com","boro":"QN","remarks":null,"type":"Point","lat":"40.740157"},"geometry":{"type":"Point","coordinates":[-73.9486837,40.740157]}},
+
+    {"type":"Feature","properties":{"x":"1017160.47452","city":"Brooklyn","businessname":"Sula NYC","businesstype":"Skincare","design":"Graphics and Web","y":"237209.638491","owner":"Wim Wenders","address":"Queens Blvd, Forest Hills, NY 11375","objectid":"0002","long":"-73.8544303","website":"www.sulaNYC.com","boro":"QN","remarks":null,"type":"Point","lat":"40.7269364"},"geometry":{"type":"Point","coordinates":[-73.8544303,40.7269364]}},
+
+    {"type":"Feature","properties":{"x":"1017160.47452","city":"Brooklyn","businessname":"Huckleberrypress","businesstype":"Printing","design":"Web","y":"237209.638491","owner":"Justin","address":"Brooklyn Flea Industry City","objectid":"0004","long":"-74.009366","website":"https://www.etsy.com/wholesale/vendor/11127191/linesheet","boro":"QN","remarks":null,"type":"Point","lat":"40.6566404"},"geometry":{"type":"Point","coordinates":[-74.009366,40.6566404]}},
+
+    {"type":"Feature","properties":{"x":"1017160.47452","city":"Brooklyn","businessname":"QueenMajestyHotsauce","businesstype":"Food","design":"Web and Social Media","y":"237209.638491","owner":"Erica","address":"Brooklyn Flea Industry City","objectid":"0005","long":"-74.009366","website":"https://www.queenmajestyhotsauce.com","boro":"BN","remarks":null,"type":"Point","lat":"40.6566404"},"geometry":{"type":"Point","coordinates":[-74.009366,40.6566404]}},
+
+    {"type":"Feature","properties":{"x":"1017160.47452","city":"Brooklyn","businessname":"Nina Z","businesstype":"Apparal","design":"Web and Social Media","y":"237209.638491","owner":"Erica","address":"Brooklyn Flea Industry City","objectid":"0006","long":"-74.009366","website":"https://www.ninaznyc.com","boro":"BN","remarks":null,"type":"Point","lat":"40.6566404"},"geometry":{"type":"Point","coordinates":[-74.009366,40.6566404]}},
+
+    {"type":"Feature","properties":{"x":"1017160.47452","city":"Brooklyn","businessname":"Suzannah Thompson","businesstype":"Apparal","design":"Web and Social Media","y":"237209.638491","owner":"Suzannah Thompson","address":"Brooklyn Flea Industry City","objectid":"0007","long":"-74.009366","website":"https://www.ninaznyc.com","boro":"BN","remarks":null,"type":"Point","lat":"40.6566404"},"geometry":{"type":"Point","coordinates":[-74.009366,40.6566404]}},
+
+    {"type":"Feature","properties":{"x":"1017160.47452","city":"Brooklyn","businessname":"Art of Post-its Thompson","businesstype":"Apparal","Art and Illustraton":"Web,Social Media & Product","y":"237209.638491","owner":"Suzannah Thompson","address":"Brooklyn Flea Industry City","objectid":"0008","long":"-74.009366","website":"https://www.ninaznyc.com","boro":"BN","remarks":null,"type":"Point","lat":"40.6566404"},"geometry":{"type":"Point","coordinates":[-74.009366,40.6566404]}},
+
+    {"type":"Feature","properties":{"x":"1017160.47452","city":"Brooklyn","businessname":"Evan Eisman Company","businesstype":"Materials","design":"Graphics and Web","y":"237209.638491","owner":"Evan Eisman","address":"Brooklyn Navy Yard, Building 280, Suite 817, Brooklyn Navy Yard Cgnrtn, Brooklyn, NY 11205","objectid":"0009","long":"-73.9760126","website":"www.evaneisman.com","boro":"BN","remarks":null,"type":"Point","lat":"40.6986848"},"geometry":{"type":"Point","coordinates":[-73.9760126,40.6986848]}},
+
+    {"type":"Feature","properties":{"x":"1017160.47452","city":"Brooklyn","businessname":"Claudia Pearson","businesstype":"Print","design":"Web","y":"237209.638491","owner":"Claudia Pearson","address":"141 Greene Ave, Waverly Place","objectid":"0010","long":"-73.9685763","website":"www.evaneisman.com","boro":"BN","remarks":null,"type":"Point","lat":"40.6867885"},"geometry":{"type":"Point","coordinates":[-73.9685763,40.6867885]}},
+
+    {"type":"Feature","properties":{"x":"1017160.47452","city":"Brooklyn","businessname":"Room Salon NYC","businesstype":"Salon","design":"Web & Product","y":"237209.638491","owner":"Takeo Suzuki","address":"210 Roebling St, New York","objectid":"0011","long":"-73.9612416","website":"www.evaneisman.com","boro":"BN","remarks":null,"type":"Point","lat":"40.7124514"},"geometry":{"type":"Point","coordinates":[-73.9612416,40.7124514]}},
+
+    {"type":"Feature","properties":{"x":"1017160.47452","city":"Queens","businessname":"Shape and Furnish","businesstype":"Furniture","design":"Product","y":"237209.638491","owner":"Maria Sereti","address":"3721 12th St, Long Island City, NY 11101","objectid":"0012","long":"-73.9612416","website":"www.shapeandfurnish.com","boro":"QN","remarks":null,"type":"Point","lat":"40.7124514"},"geometry":{"type":"Point","coordinates":[-73.94235,40.758708]}},
+
+    {"type":"Feature","properties":{"x":"1017160.47452","city":"Brooklyn","businessname":"Urban Vintage","businesstype":"Food","design":"Interior","y":"237209.638491","owner":"Elizabeth","address":"294 Grand Ave, Brooklyn, NY 11238","objectid":"0013","long":"-73.9631701","website":"www.urban-vintage.squarespace.com","boro":"QN","remarks":null,"type":"Point","lat":"40.6880447"},"geometry":{"type":"Point","coordinates":[-73.9631701,40.6880447]}
+    }]
+}
+
+

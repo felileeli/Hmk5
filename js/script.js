@@ -1,7 +1,7 @@
 // This script demonstrates some simple things one can do with leaflet.js
 
 
-var map = L.map('map').setView([40.71,-73.93], 11);
+var map = L.map('map').setView([40.71,-73.93], 12);
 
 // set a tile layer to be CartoDB tiles 
 var CartoDBTiles = L.tileLayer('http://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png',{
@@ -11,11 +11,66 @@ var CartoDBTiles = L.tileLayer('http://{s}.basemaps.cartocdn.com/light_all/{z}/{
 // add these tiles to our map
 map.addLayer(CartoDBTiles);
 
+// add in OSM Mapnik tiles
+var OSMMapnikTiles = L.tileLayer('http://{s}.tiles.wmflabs.org/bw-mapnik/{z}/{x}/{y}.png',{
+  attribution: 'Map Data and Tiles &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> Contributors'
+});
+// do not add to the map just yet, but add varible to the layer switcher control 
 
-var neighborhoodstwoGeoJSON;
+// add in MapQuest Open Aerial layer
+var MapQuestAerialTiles = L.tileLayer('http://otile1.mqcdn.com/tiles/1.0.0/sat/{z}/{x}/{y}.png',{
+  attribution: 'Tiles Courtesy of <a href="http://www.mapquest.com/" target="_blank">MapQuest</a> <img src="http://developer.mapquest.com/content/osm/mq_logo.png">'
+});
 
-// use jQuery get geoJSON to grab geoJson layer, parse it, then plot it on the map using the plotDataset function
-$.getJSON( "geojson/NYC_neighborhood_data.geojson", function( data ) {
+
+// create global variables we can use for layer controls
+var wifihotspotGeoJSon;
+var NeighborhoodGeoJSON;
+
+
+// start the chain reaction by running the addSubwayLines function
+addwifihotspotData();
+
+// use jQuery get geoJSON to grab geoJson layer, parse it, then plot it on the map
+// because of the asynchronous nature of Javascript, we'll wrap each "getJSON" call in a function, and then call each one in turn. This ensures our layer will work  
+
+function addwifihotspotData() {
+    $.getJSON( "geojson/NYC_Wi-Fi_Hotspot_Locations.geojson", function( data ) {
+        var wifihotspot = data;
+
+        var wifihotspotPointToLayer = function (Feature, latlng){
+            var wifihotspotMarker= L.circle(latlng, 300, {
+                fillColor: 'tomato',
+                fillOpacity: 1
+            });
+            
+            return wifihotspotMarker;  
+        }
+
+        var wifihotspotMouseOver = function (Feature, layer) {
+
+            // let's bind some feature properties to a pop up
+            layer.bindPopup("<strong>Name:</strong> " + Feature.properties.businessname+ "<br/><strong>Business Type: </strong>" + Feature.properties.businesstype +"<br/><strong>Address:</br></strong>" + Feature.properties.address + "<br/><strong>Design Services Needed: </strong>" + Feature.properties.design);
+        }
+
+        // create Leaflet layer using L.geojson; don't add to the map just yet
+        wifihotspotGeoJSON = L.geoJson(wifihotspot, {
+            pointToLayer: wifihotspotPointToLayer,
+            onEachFeature: wifihotspotMouseOver
+        });
+
+        // don't add the pawn shop layer to the map yet
+
+        // run our next function to bring in the Pawn Shop data
+        addNeighborhoodData();
+
+    });
+
+}
+
+/*
+
+$.getJSON( "geojson/NYC_Wi-Fi_Hotspot_Locations.geojson", function( data ) {
     var dataset = data;
     // draw the dataset on the map
     plotDataset(dataset);
@@ -31,51 +86,17 @@ function plotDataset(dataset) {
     }).addTo(map);
 }
 
-// function that sets the style of the geojson layer
 var acsStyle = function (feature, latlng) {
-
-    var calc = calculatePercentage(feature);
-
+    
     var style = {
         weight: 1,
         opacity: .25,
         color: 'grey',
-        fillOpacity: fillOpacity(calc[1]),
-        fillColor: fillColorPercentage(calc[1])
-
     };
 
     return style;
 
 }
-
-function calculatePercentage(feature) {
-    var output = [];
-    var numerator = parseFloat(feature.properties.Employed);
-    var denominator = parseFloat(feature.properties.Unemployed);
-    var percentage = (feature.properties.UnempRate) * 100;
-    output.push(numerator);
-    output.push(denominator);
-    output.push(percentage);
-    return output;    
-}
-
-// function that fills polygons with color based on the data
-function fillColorPercentage(d) {
-    return d > 4000 ?'#006d2c' :
-           d > 1000 ?'#31a354' :
-           d > 500 ? '#74c476' :
-           d > 200 ? '#a1d99b' :
-           d > 100 ? '#c7e9c0' :
-                    '#edf8e9';
-}
-
-// function that sets the fillOpacity of layers -- if % is 0 then make polygons transparent
-function fillOpacity(d) {
-    return d == 0 ? 0.0 :
-                    0.75;
-}
-
 
 // empty L.popup so we can fire it outside of the map
 var popup = new L.Popup();
@@ -83,16 +104,11 @@ var popup = new L.Popup();
 // set up a counter so we can assign an ID to each layer
 var count = 0;
 
-// on each feature function that loops through the dataset, binds popups, and creates a count
 var acsOnEachFeature = function(feature,layer){
-    var calc = calculatePercentage(feature);
 
     // let's bind some feature properties to a pop up with an .on("click", ...) command. We do this so we can fire it both on and off the map
     layer.on("mouseover", function (e) {
-        var bounds = layer.getBounds();
-        var popupContent = "<strong>Neighbourhood:</strong>"+ (feature.properties.NYC_NEIG)+"<br><strong>Unemployment Rate:</strong>" + Math.round((feature.properties.UnempRate)*100)+ "%";
-        popup.setLatLng(bounds.getCenter());
-        popup.setContent(popupContent);
+        var popupContent = ("<strong>Name:</strong> " + feature.properties.businessname);
         map.openPopup(popup);
     });
 
@@ -102,35 +118,6 @@ var acsOnEachFeature = function(feature,layer){
     //console.log(layer._leaflet_id);
 
 }
-
-
-// add in a legend to make sense of it all
-// create a container for the legend and set the location
-
-var legend = L.control({position: 'bottomright'});
-
-// using a function, create a div element for the legend and return that div
-legend.onAdd = function (map) {
-
-    // a method in Leaflet for creating new divs and setting classes
-    var div = L.DomUtil.create('div', 'legend'),
-        amounts = [0,100, 200, 500, 1000, 4000];
-
-        div.innerHTML += '<p>Unemployment Level in NYC Neighbourhood</p>';
-
-        for (var i = 0; i < amounts.length; i++) {
-            div.innerHTML +=
-                '<i style="background:' + fillColorPercentage(amounts[i] + 1) + '"></i> ' +
-                amounts[i] + (amounts[i + 1] ? '&ndash;' + amounts[i + 1] + '<br />' : '<br />');
-        }
-
-    return div;
-};
-
-
-// add the legend to the map
-legend.addTo(map);
-
 
 
 // function to create a list in the right hand column with links that will launch the pop-ups on the map
@@ -148,11 +135,11 @@ function createListForClick(dataset) {
         .enter()
         .append("li")
         .html(function(d) { 
-            return '<a href="#">' + d.properties.NYC_NEIG+ '</a>'; 
+            return '<a href="#">' + d.properties.businessname+ '</a>'; 
         })
 
         .on('mouseover', function(d, i) {
-            console.log(d.properties.NYC_NEIG);
+            console.log(d.properties.businessname);
             console.log(i);
             var leafletId = 'LayerID' + i;
             map._layers[leafletId].fire('mouseover');
@@ -161,8 +148,8 @@ function createListForClick(dataset) {
 
 }
 
-// use jQuery get geoJSON to grab geoJson layer, parse it, then plot it on the map using the plotDataset function
-// let's add the subway lines
+*/
+
 $.getJSON( "geojson/MTA_subway_lines.geojson", function( data ) {
     // ensure jQuery has pulled all data out of the geojson file
     var subwayLines = data;
@@ -170,7 +157,7 @@ $.getJSON( "geojson/MTA_subway_lines.geojson", function( data ) {
 
     // style for subway lines
     var subwayStyle = {
-        "color": "#a5a5a5",
+        "color": "black",
         "weight": 1,
         "opacity": 0.80
     };
@@ -189,77 +176,67 @@ $.getJSON( "geojson/MTA_subway_lines.geojson", function( data ) {
 
 });
 
+function addNeighborhoodData() {
 
-// lets add data from the API now
-// set a global variable to use in the D3 scale below
-// use jQuery geoJSON to grab data from API
-$.getJSON( "https://data.cityofnewyork.us/resource/erm2-nwe9.json?$$app_token=rQIMJbYqnCnhVM9XNPHE9tj0g&borough=BROOKLYN&complaint_type=Noise&status=Open", function( data ) {
-    var dataset = data;
-    // draw the dataset on the map
-    plotAPIData(dataset);
+    // let's add neighborhood data
+    $.getJSON( "geojson/NYC_neighborhood_data.geojson", function( data ) {
+        // ensure jQuery has pulled all data out of the geojson file
+        var neighborhoods = data;
 
-});
+        // neighborhood choropleth map
+        // let's use % in poverty to color the neighborhood map
+        var neighborhoodsStyle = function (feature){
+            var value = feature.properties.NYC_NEIG;
+            var style = {
+                stroke: true,
+                weight: 1,
+                opacity:0.25,
+                color: 'grey',
+            };
 
-// create a leaflet layer group to add your API dots to so we can add these to the map
-var apiLayerGroup = L.layerGroup();
-
-// since these data are not geoJson, we have to build our dots from the data by hand
-function plotAPIData(dataset) {
-    // set up D3 ordinal scle for coloring the dots just once
-    var ordinalScale = setUpD3Scale(dataset);
-    //console.log(ordinalScale("Noise, Barking Dog (NR5)"));
-
-
-    // loop through each object in the dataset and create a circle marker for each one using a jQuery for each loop
-    $.each(dataset, function( index, value ) {
-
-        // check to see if lat or lon is undefined or null
-        if ((typeof value.latitude !== "undefined" || typeof value.longitude !== "undefined") || (value.latitude && value.longitude)) {
-            // create a leaflet lat lon object to use in L.circleMarker
-            var latlng = L.latLng(value.latitude, value.longitude);
-     
-            var apiMarker = L.circleMarker(latlng, {
-                stroke: false,
-                fillColor: ordinalScale(value.descriptor),
-                fillOpacity: 1,
-                radius: 5
-            });
-
-            // bind a simple popup so we know what the noise complaint is
-            apiMarker.bindPopup(value.descriptor);
-
-            // add dots to the layer group
-            apiLayerGroup.addLayer(apiMarker);
-
+            return style;
         }
 
-    });
+        var neighmouseOver = function (feature, layer) {
+            // let's bind some feature properties to a pop up
+            layer.bindPopup("<strong>Neighborhood:</strong> " + feature.properties.NYC_NEIG);
+        }
 
-    apiLayerGroup.addTo(map);
+        // create Leaflet layer using L.geojson; don't add to the map just yet
+        neighborhoodsGeoJSON = L.geoJson(neighborhoods, {
+            style: neighborhoodsStyle,
+            onEachFeature: neighmouseOver
+        });
+
+        // now lets add the data to the map in the order that we want it to appear
+
+        // neighborhoods on the bottom
+        neighborhoodsGeoJSON.addTo(map);
+        wifihotspotGeoJSON.addTo(map);
+       
+        // now create the layer controls!
+        createLayerControls(); 
+
+    });
 
 }
 
-function setUpD3Scale(dataset) {
-    //console.log(dataset);
-    // create unique list of descriptors
-    // first we need to create an array of descriptors
-    var descriptors = [];
+function createLayerControls(){
 
-    // loop through descriptors and add to descriptor array
-    $.each(dataset, function( index, value ) {
-        descriptors.push(value.descriptor);
-    });
+    // add in layer controls
+    var baseMaps = {
+        "CartoDB": CartoDBTiles,
+        "OSM Mapnik": OSMMapnikTiles,
+        "Mapquest Aerial": MapQuestAerialTiles
+    };
 
-    // use underscore to create a unique array
-    var descriptorsUnique = _.uniq(descriptors);
+    var overlayMaps = {
+        "Neighborhood": neighborhoodsGeoJSON,
+        "Small businesses": wifihotspotGeoJSON,
+        "subway": subwayLinesGeoJSON,
+    };
 
-    // create a D3 ordinal scale based on that unique array as a domain
-    var ordinalScale = d3.scale.category20()
-        .domain(descriptorsUnique);
-
-    return ordinalScale;
+    // add control
+    L.control.layers(baseMaps, overlayMaps).addTo(map);
 
 }
-
-
-
